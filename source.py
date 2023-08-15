@@ -1,35 +1,18 @@
 class Data:
-    _list_types_data = [
-        'Email',
-        'website_URL',
-        'Date',
-        'Number',
-        'Credit_Card_Number',
-        'Mobile_Phone_Number'
-    ]
-
-    _curr_inputs = ['e', 'ws', 'd', 'n', 'c', 'm']
-
     def __init__(self, type_data_v: str) -> None:
+        self._list_types_data = {
+            'Email' : Data.check_Email,
+            'website_URL' : Data.check_Website_URL,
+            'Date' : Data.check_Date,
+            'Number' : Data.check_Number,
+            'Credit_Card_Number' : Data.check_Credit_Card_Number,
+            'Mobile_Phone_Number' : Data.check_Mobile_Phone_Number
+        }
         self.type_data = type_data_v
 
-    def data_ask(self):
-        user_input = input("Email(e), website URL(ws), Date(d), Number(n), Credit_Card_Number(c), Mobile_Phone_Number(m): ")
-        while user_input not in self._curr_inputs:
-            print("Erroooooor!")
+    def data_ask(self) -> bool:
         data = input('input your data: ')
-        if user_input == 'e':
-            print(self.check_Email(data))
-        elif user_input == 'ws':
-            print(self.check_Website_URL(data))
-        elif user_input == 'd':
-            print(self.check_Date)
-        elif user_input == 'n':
-            print(self.check_Number(data))
-        elif user_input == 'c':
-            print(self.check_Credit_Card_Number(data))
-        else:
-            print(self.check_Mobile_Phone_Number(data))
+        return self._list_types_data[self.type_data](data)
 
     @property
     def type_data(self) -> str:
@@ -37,7 +20,7 @@ class Data:
 
     @type_data.setter
     def type_data(self, type_data_v: str) -> None:
-        if type_data_v not in self._list_types_data:
+        if type_data_v not in self._list_types_data.keys():
             raise ValueError("Value error")
         self._type_data = type_data_v
 
@@ -113,6 +96,27 @@ class Data:
             return True
         return False
 
-d = Data('Email')
-d.data_ask()
+_curr_inputs = ['e', 'ws', 'd', 'n', 'c', 'm']
+
+def main() -> None:
+    user_input = input("Email(e), website URL(ws), Date(d), Number(n), Credit_Card_Number(c), Mobile_Phone_Number(m): ")
+    while user_input not in _curr_inputs:
+        print("Erroooooor!")
+        user_input = input("Email(e), website URL(ws), Date(d), Number(n), Credit_Card_Number(c), Mobile_Phone_Number(m): ")
+    if user_input == 'e':
+        d = Data("Email")
+    elif user_input == 'ws':
+        d = Data("Website_URL")
+    elif user_input == 'c':
+        d = Data("Credit_Card_Number")
+    elif user_input == 'd':
+        d = Data("Date")
+    elif user_input == 'n':
+        d = Data("Number")
+    else:
+        d = Data("Mobile_Phone_Number")
+    print(d.data_ask())
+
+if __name__ == "__main__":
+    main()
 
